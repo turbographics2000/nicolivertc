@@ -40,6 +40,7 @@ export class DesktopListController extends ListController {
                 };
                 super.addItem(item);
             }
+            video.srcObject = stream;
         }).catch(err => {
             console.log('desktop capture error', err);
         });
