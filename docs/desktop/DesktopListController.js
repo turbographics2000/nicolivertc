@@ -13,14 +13,15 @@ export class DesktopListController extends ListController {
         }));
     }
 
-    getItems({streamId, type}) {
+    getItems({ streamId, type }) {
         navigator.mediaDevices.getUserMedia({
             video: {
                 mandatory: {
                     chromeMediaSource: 'desktop',
                     chromeMediaSourceId: streamId
                 }
-            }
+            },
+            audio: false
         }).then(stream => {
             const video = document.createElement('video');
             video.autoplay = true;
