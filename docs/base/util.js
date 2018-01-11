@@ -1,13 +1,8 @@
-import { DeviceWatcher } from './DeviceWatcher.js';
-
-
 class Util {
     constructor() {
         this.audioContext = new AudioContext();
         this.setupSourceList();
         this.createThreeDTypeDropdownList();
-        this.audioContext = new AudioContext();
-        this.deviceWatcher = new DeviceWatcher();
 
         window.addEventListener('click', evt => {
             document.querySelectorAll('.flowlist').forEach(elm => elm.classList.remove('show'));
