@@ -6,7 +6,7 @@ import { MicListController } from './mic/MicListController.js';
 import { VideoListController } from './video/VideoListController.js';
 import { AudioListController } from './audio/AudioListController.js';
 import { LayoutController } from './layout/LayoutController.js';
-import { DesktopListController } from './desktop/VideoListController.js';
+import { DesktopListController } from './desktop/DesktopListController.js';
 import util from './base/util.js';
 
 
