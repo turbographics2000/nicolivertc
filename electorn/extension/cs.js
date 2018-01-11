@@ -4,7 +4,7 @@ window.addEventListener('request', evt => {
 
 chrome.runtime.onMessage.addListener(msg => {
     if (msg.streamId) {
-        const evt = new CustomEvent('desktopStreamId', { detail: msg.streamId, type: msg.type });
+        const evt = new CustomEvent('desktopStreamId', { detail: { streamId: msg.streamId, type: msg.type } });
         window.dispatchEvent(evt);
     }
 });
