@@ -1,0 +1,154 @@
+http://live2.nicovideo.jp/watch/lv300436422
+
+class="program-broadcaster-name"
+放送者：gtk2kさん
+
+class="btn-broadcast-start"
+
+<video width="100%" height="100%" preload="none" autoplay="" playsinline="playsinline" src="blob:http://live2.nicovideo.jp/003e0574-6dda-40ac-8ee2-430e44cf3fed"></video>
+
+// 放送時間のエレメント取得
+document.querySelector('span[class^="___time-display"]')
+
+// 放送者
+	if (LeoPlayer.isVideoPlayable()) {
+		function unescapeHTML(str) {
+			var div = document.createElement("div");
+			div.innerHTML = str;
+			return div.textContent || div.innerText;
+		}
+		var leoPlayerProps = {
+			apiBaseUrl: "http://live2.nicovideo.jp/unama/api/v1/",
+			staticResourceBaseUrl: "http://nicolive.cdn.nimg.jp/relive/relive_assets/2.0.104",
+			programReportApiBaseUrl: "http://untnp.live.nicovideo.jp/",
+			webSocketBaseUrl: "ws://a.live2.nicovideo.jp:2805/unama/wsapi/v1/watch/",
+			nicolivePublicApiBaseUrl: "http://ow.live.nicovideo.jp/",
+			broadcastId: "3182229979759",
+			providerType: "community",
+			relatedNicoliveProgramId: "lv300436422",
+			title: unescapeHTML("test"),
+			openTime: 1497255808 * 1000,
+			beginTime: 1497257608 * 1000, // 放送開始時間
+			endTime: 1497259408 * 1000, // 放送終了時間　(放送主が早々に放送延長をしたとしてもこの値は変わらない)
+			serverTime: 1497255813483,　
+			audienceToken: "3182229979759_802491_1497342213_9f610bdfc2d25078eb89fa81f6cef739fe110a88",
+			premiumMemberRegistration: {
+				url: "https://account.nicovideo.jp/premium/register",
+				premiumOrigin: "0"
+			},
+			externalLayout: {
+				applyBrowserFullscreen: Fullscreen.applyBrowserFullscreen,
+				unapplyBrowserFullscreen: Fullscreen.unapplyBrowserFullscreen,
+				applyMonitorFullscreen: Fullscreen.applyMonitorFullscreen,
+				unapplyMonitorFullscreen: Fullscreen.unapplyMonitorFullscreen,
+				getLeoPlayerContainerElement: function() {
+					return document.querySelector("[data-player-layout]");
+				}
+			},
+			externalClient: {
+				userAdNoticeClient: Relive.PlayerClient,
+				allegationReportClient: Relive.PlayerClient
+			},
+			userStatus: {
+				id: "802491",
+				isPremium: true,
+				isOperator: true
+			},
+			coeResourcesBaseUrl: "http://nicolive.cdn.nimg.jp/live/coe/1.0.19/",
+			isSocialGroupMember: true,
+			socialGroup: {
+				name: unescapeHTML("&#12486;&#12473;&#12488;&#25918;&#36865;&#29992;"),
+				registrationUrl: "http://com.nicovideo.jp/motion/co3600594?ref=live2watch",
+				thumbnail: "http://icon.nimg.jp/community/s/360/co3600594.jpg?1492161036"
+			},
+			bspComment: {
+				isPermittedToPost: false,
+				postApiUrl: "http://live.nicovideo.jp/api/relive/bsp/comment/lv300436422",
+				defaultUserName: unescapeHTML("")
+			},
+			commentFiltersApiUrl: "http://live2.nicovideo.jp/unama/api/v1/programs/3182229979759/comment_filters",
+			csrfToken: "58c37c8857f741f79ffa9edde7aa783dfa9cecfb-1497255813483-954afe0e3b3cd4bb36457887",
+			isCommentBanned: false,
+			programState: JSON.parse(unescapeHTML("{&quot;commentLock&quot;:false,&quot;enquete&quot;:{},&quot;jump&quot;:{},&quot;permanentComment&quot;:{&quot;body&quot;:&quot;&quot;,&quot;name&quot;:&quot;&quot;,&quot;mail&quot;:&quot;&quot;},&quot;videoAd&quot;:{},&quot;payProgramTrialWatch&quot;:{},&quot;audienceCommentPosition&quot;:&quot;normal&quot;}"))
+		};
+		leoPlayerProps.operatorCommentApiUrl = "http://live2.nicovideo.jp/unama/api/v2/programs/3182229979759/operator_comment";
+		LeoPlayer.render("player-block");
+		LeoPlayer.runUnama(leoPlayerProps);
+		Fullscreen.setTargetElement(document.querySelector("[data-player-layout]"));
+		Fullscreen.setUnapplyFullScreenHandler(LeoPlayer.unapplyFullScreenHandler);
+	} else {
+		var programMainBlock = document.getElementById("program-main-block");
+		programMainBlock.classList.add("disabled");
+	}
+
+
+
+// 視聴者
+	if (LeoPlayer.isVideoPlayable()) {
+		function unescapeHTML(str) {
+			var div = document.createElement("div");
+			div.innerHTML = str;
+			return div.textContent || div.innerText;
+		}
+		var leoPlayerProps = {
+			apiBaseUrl: "http://live2.nicovideo.jp/unama/api/v1/",
+			staticResourceBaseUrl: "http://nicolive.cdn.nimg.jp/relive/relive_assets/2.0.104",
+			programReportApiBaseUrl: "http://untnp.live.nicovideo.jp/",
+			webSocketBaseUrl: "ws://a.live2.nicovideo.jp:2805/unama/wsapi/v1/watch/",
+			nicolivePublicApiBaseUrl: "http://ow.live.nicovideo.jp/",
+			broadcastId: "3182229979759",
+			providerType: "community",
+			relatedNicoliveProgramId: "lv300436422",
+			title: unescapeHTML("test"),
+			openTime: 1497255808 * 1000,
+			beginTime: 1497256391 * 1000,
+			endTime: 1497258191 * 1000,
+			serverTime: 1497256559975,
+			audienceToken: "3182229979759_6583418_1497342959_14bca4f376305d65f4aa0047bcf34411dc353ed9",
+			premiumMemberRegistration: {
+				url: "https://account.nicovideo.jp/premium/register",
+				premiumOrigin: "0"
+			},
+			externalLayout: {
+				applyBrowserFullscreen: Fullscreen.applyBrowserFullscreen,
+				unapplyBrowserFullscreen: Fullscreen.unapplyBrowserFullscreen,
+				applyMonitorFullscreen: Fullscreen.applyMonitorFullscreen,
+				unapplyMonitorFullscreen: Fullscreen.unapplyMonitorFullscreen,
+				getLeoPlayerContainerElement: function() {
+					return document.querySelector("[data-player-layout]");
+				}
+			},
+			externalClient: {
+				userAdNoticeClient: Relive.PlayerClient,
+				allegationReportClient: Relive.PlayerClient
+			},
+			userStatus: {
+				id: "6583418",
+				isPremium: false,
+				isOperator: false
+			},
+			coeResourcesBaseUrl: "http://nicolive.cdn.nimg.jp/live/coe/1.0.19/",
+			isSocialGroupMember: true,
+			socialGroup: {
+				name: unescapeHTML("&#12486;&#12473;&#12488;&#25918;&#36865;&#29992;"),
+				registrationUrl: "http://com.nicovideo.jp/motion/co3600594?ref=live2watch",
+				thumbnail: "http://icon.nimg.jp/community/s/360/co3600594.jpg?1492161036"
+			},
+			bspComment: {
+				isPermittedToPost: false,
+				postApiUrl: "http://live.nicovideo.jp/api/relive/bsp/comment/lv300436422",
+				defaultUserName: unescapeHTML("")
+			},
+			commentFiltersApiUrl: "",
+			csrfToken: "",
+			isCommentBanned: false,
+			programState: JSON.parse(unescapeHTML("{&quot;commentLock&quot;:false,&quot;enquete&quot;:{},&quot;jump&quot;:{},&quot;permanentComment&quot;:{&quot;body&quot;:&quot;&quot;,&quot;name&quot;:&quot;&quot;,&quot;mail&quot;:&quot;&quot;},&quot;videoAd&quot;:{},&quot;payProgramTrialWatch&quot;:{},&quot;audienceCommentPosition&quot;:&quot;normal&quot;}"))
+		};
+		LeoPlayer.render("player-block");
+		LeoPlayer.runUnama(leoPlayerProps);
+		Fullscreen.setTargetElement(document.querySelector("[data-player-layout]"));
+		Fullscreen.setUnapplyFullScreenHandler(LeoPlayer.unapplyFullScreenHandler);
+	} else {
+		var programMainBlock = document.getElementById("program-main-block");
+		programMainBlock.classList.add("disabled");
+	}

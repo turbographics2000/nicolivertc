@@ -1,0 +1,665 @@
+html,
+body {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 4px;
+    box-sizing: border-box;
+    font-family: Arial;
+}
+
+body {
+    display: grid;
+    grid-gap: 6px;
+    grid-template-rows: 1fr 100px;
+    grid-template-columns: 300px 1fr 300px;
+}
+
+body {
+    background: #f0f0f0;
+}
+
+body>div {
+    background: white;
+    box-shadow: 1px 1px 1px black;
+}
+
+div {
+    position: relative;
+}
+
+.ellipsis {
+    display: table-cell !important;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+button,
+.button,
+.list-button,
+.list-item-button,
+.draggable {
+    cursor: pointer;
+}
+
+.tab-container {
+    position: relative;
+    display: flex;
+}
+
+.tab {
+    flex: 1;
+    text-align: center;
+    cursor: pointer;
+    padding: 4px;
+    font-size: 14px;
+}
+
+.tab-hilighter {
+    border-bottom: 2px solid;
+    transition: transform 200ms ease;
+}
+
+#inputList {
+    border: 1px solid;
+    grid-row: 1 / 3;
+    grid-column: 1;
+}
+
+#layoutArea {
+    border: 1px solid;
+    grid-column: 2;
+    grid-row: 1;
+}
+
+#cnv {
+    position: absolute;
+    border: 1px solid;
+    box-sizing: border-box;
+}
+
+#bkCnv,
+#bbCnv {
+    position: absolute;
+    left: 0;
+    right: 0;
+    width: 100%;
+    height: 100%;
+}
+
+#audioArea {
+    border: 1px solid;
+    height: 100%;
+    grid-column: 2;
+    grid-row: 2;
+}
+
+.controlpanel-container {
+    border: 1px solid;
+    grid-column: 3;
+    grid-row: 1 / 3;
+}
+
+.list-container {
+    height: 170px;
+    margin: 0 10px;
+    margin-top: 10px;
+}
+
+.list-container>div {
+    width: 100%;
+    height: calc(100% - 30px);
+    border: 1px solid;
+}
+
+.list-button-container {
+    position: relative;
+    width: 100%;
+    height: 30px;
+    background: #ddd;
+}
+
+.list-button-container>div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.list-button {
+    width: 30px;
+    height: 100%;
+    float: left;
+    font-size: 30px;
+    line-height: 30px;
+    text-align: center;
+    user-select: none;
+}
+
+.list-button:hover {
+    background-color: gray;
+    color: white;
+}
+
+.list-body {
+    font-size: small;
+    height: calc(100% - 30px);
+    overflow-y: auto;
+}
+
+.list-body.selectable .item.selected {
+    background-color: #abcaf8;
+}
+
+.list-item>div {
+    display: flex;
+    align-items: center;
+}
+
+.list-item-button {
+    justify-content: center;
+    cursor: pointer;
+    opacity: 0.3;
+}
+
+.list-item-button.on {
+    opacity: 1;
+}
+
+.item-header {
+    width: calc(100% - 1em);
+}
+
+#cameraList .list-body {
+    overflow-y: auto;
+    position: relative;
+    width: 100%;
+    height: calc(100% - 30px);
+}
+
+#cameraList .item {
+    cursor: pointer;
+    width: 240px;
+    height: 135px;
+    overflow: hidden;
+    border: 1px solid gray;
+    margin: 10px auto;
+}
+
+#cameraList .item-header {
+    position: absolute;
+    line-height: 30px;
+    vertical-align: middle;
+    top: 0;
+    background: rgba(0, 0, 0, 0.3);
+    color: white;
+    padding: 0 0.5em;
+    z-index: 1;
+}
+
+#cameraList video {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+#micList .item {
+    width: 240px;
+    display: grid;
+    grid-template-rows: 30px 10px;
+    grid-template-columns: 1fr;
+    border: 1px solid gray;
+    margin: 10px auto;
+}
+
+#micList .item-header {
+    grid-row: 1;
+    grid-column: 1;
+    padding: 0 0.5em;
+    display: flex;
+    align-items: center;
+}
+
+#micList .item-volumemeter {
+    background: green;
+    height: 100%;
+}
+
+#micList .item-volumemeter-container {
+    grid-row: 2;
+    grid-column: 1;
+}
+
+#videoList .item {
+    cursor: pointer;
+    width: 240px;
+    height: calc(135px + 20px);
+    overflow: hidden;
+    border: 1px solid gray;
+    margin: 10px auto;
+}
+
+#videoList .item-header {
+    position: absolute;
+    line-height: 30px;
+    vertical-align: middle;
+    top: 0;
+    background: rgba(0, 0, 0, 0.3);
+    color: white;
+    padding: 0 0.5em;
+    z-index: 1;
+}
+
+#videoList .item video {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 135px;
+    object-fit: contain;
+}
+
+#videoList .player-controller-container,
+#audioList .player-controller-container {
+    position: absolute;
+    left: 0;
+    top: 135px;
+    width: 100%;
+    height: 20px;
+}
+
+#audioList .item {
+    cursor: pointer;
+    width: 240px;
+    height: calc(135px + 20px);
+    overflow: hidden;
+    border: 1px solid gray;
+    margin: 10px auto;
+}
+
+#audioList .item-header {
+    position: absolute;
+    line-height: 30px;
+    vertical-align: middle;
+    top: 0;
+    background: rgba(0, 0, 0, 0.3);
+    color: white;
+    padding: 0 0.5em;
+    z-index: 1;
+}
+
+#audioList .waveform {
+    position: absolute;
+    left: 0;
+    top: 30px;
+    width: 100%;
+    display: inherit;
+}
+
+#audioList .playingposition {
+    position: absolute;
+    top: 30px;
+    width: 1px;
+    left: -4px;
+    height: calc(100% - 50px);
+    border: 2px solid red;
+    box-sizing: border-box;
+}
+
+#audioList .item-audio {
+    position: absolute;
+    width: 100%;
+    bottom: 0;
+}
+
+#desktopList {
+    text-align: center;
+    padding: 10px;
+}
+
+#sceneList div,
+#sourceList div {
+    box-sizing: border-box;
+}
+
+#sceneList .item {
+    display: grid;
+    grid-template-rows: 26px;
+    grid-template-columns: 1fr 30px;
+}
+
+#sceneList .item-name {
+    grid-column: 1;
+}
+
+#sceneList .item-special {
+    grid-column: 2;
+}
+
+#sourceList .item {
+    display: grid;
+    grid-template-rows: 26px;
+    grid-template-columns: 26px 26px 1fr 40px 50px;
+}
+
+#sourceList .item>* {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#sourceList .item-visibility {
+    grid-column: 1;
+}
+
+#sourceList .item-locked {
+    grid-column: 2;
+}
+
+#sourceList .item-name {
+    grid-column: 3;
+}
+
+#sourceList .item-360 {
+    font-weight: 900;
+    grid-column: 4;
+}
+
+#sourceList .item-3D {
+    grid-column: 5;
+}
+
+#mixerList .list-body {
+    height: 100%;
+}
+
+#mixerList .item {
+    display: grid;
+    grid-template-rows: 20px 30px;
+    /* grid-template-columns: 1fr 30px 30px; */
+    grid-template-columns: 1fr 30px;
+}
+
+#mixerList .item>* {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#mixerList .item:nth-child(n + 2) {
+    margin-top: 0.5em;
+}
+
+#mixerList .item.error {
+    display: grid;
+    grid-template-rows: 30px 30px;
+    grid-template-columns: 1fr 0;
+}
+
+#mixerList .item-header {
+    grid-row: 1;
+    grid-column: 1 / 4;
+    display: grid !important;
+    grid-template-columns: 1fr 30px;
+}
+
+#mixerList .item-name::before {
+    content: 'マイク：'
+}
+
+#mixerList .item-name {
+    float: left;
+    grid-row: 1;
+    grid-column: 1;
+}
+
+#mixerList .item-volumevalue {
+    float: right;
+    grid-row: 1;
+    grid-column: 2;
+    text-align: right;
+}
+
+#mixerList .item-volume {
+    grid-row: 2;
+    grid-column: 1;
+}
+
+#mixerList .item-muted {
+    grid-row: 2;
+    grid-column: 2;
+}
+
+#mixerList .item-settings {
+    grid-row: 2;
+    grid-column: 3;
+    cursor: pointer;
+}
+
+#mixerList .item-error {
+    color: red;
+    grid-row: 2;
+    grid-column: 1 / 4;
+}
+
+.transition .list-button {
+    float: right;
+}
+
+.transition>div {
+    border: none;
+}
+
+#transitionSelect {
+    vertical-align: middle;
+}
+
+#transitionTime {
+    width: 70px;
+}
+
+.broadcast-button-container {
+    width: 100%;
+    position: absolute;
+    bottom: 0;
+    height: 70px;
+    float: left;
+}
+
+#btnBroadcast {
+    width: calc(100% - 20px);
+    height: 50px;
+    border: 1px solid;
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    margin: auto;
+    font-size: 24px;
+    text-align: center;
+    line-height: 50px;
+}
+
+.dialog-mask {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.3);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.dialog {
+    padding: 10px;
+    border: 1px solid;
+    background: white;
+}
+
+.dialog input {
+    width: 100%;
+}
+
+.dialog-button-container {
+    padding-top: 10px;
+    text-align: center;
+}
+
+.dialog-button {
+    cursor: pointer;
+    display: inline-block;
+    border: 1px solid;
+    width: 100px;
+}
+
+.dialog-dontaskmeagain {
+    vertical-align: middle;
+    text-align: center;
+    cursor: pointer;
+}
+
+.dialog-dontaskmeagain .checkbox {
+    border: 1px solid;
+    font-size: 1em;
+    display: inline-block;
+    height: 1em;
+    vertical-align: middle;
+    position: relative;
+}
+
+.dialog-dontaskmeagain .checkbox i {
+    font-size: 1em;
+    vertical-align: top;
+    visibility: hidden;
+}
+
+.dialog-dontaskmeagain.checked .checkbox i {
+    visibility: visible;
+}
+
+.dialog-dontaskmeagain span {
+    vertical-align: middle;
+}
+
+.dialog-radiobuttons-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid;
+}
+
+.dialog-radioitem {
+    flex: 1;
+    text-align: center;
+    vertical-align: middle;
+    cursor: pointer;
+    font-family: monospace;
+}
+
+.dialog-radioitem.selected {
+    background: black;
+    color: white;
+}
+
+.dialog-radioitem:nth-child(n + 2) {
+    border-left: 1px solid;
+}
+
+.flowlist {
+    position: absolute;
+    display: none;
+    border: 1px solid;
+    background: white;
+    padding: 5px;
+}
+
+.flowlist.media {
+    background: black;
+    color: white;
+    font-size: 10px;
+}
+
+.flowlist.show {
+    display: block;
+}
+
+.flowlist-item {
+    cursor: pointer;
+    padding: 0 2px;
+}
+
+.flowlist-item:nth-child(n + 2) {
+    padding-top: 0.5em;
+}
+
+.flowlist-item:hover {
+    background: #ccc;
+}
+
+.flowlist.media .flowlist-item:hover {
+    color: black;
+}
+
+.player-controller {
+    display: grid;
+    grid-template-rows: 20px;
+    grid-template-columns: 24px 8px 1fr 8px 20px 8px 60px 8px;
+    width: 100%;
+    cursor: pointer;
+}
+
+.play-button,
+.volume-button {
+    grid-row: 1;
+    grid-column: 1;
+    display: flex;
+    align-items: center;
+}
+
+.volume-button {
+    grid-column: 5;
+}
+
+.seek-container,
+.volume-container {
+    position: relative;
+    grid-column: 3;
+    display: flex;
+    align-items: center;
+}
+
+.volume-container {
+    grid-column: 7;
+}
+
+.seek-bar-container,
+.volume-bar-container {
+    height: 4px;
+    width: 100%;
+    background: lightgray;
+    position: relative;
+}
+
+.seek-bar,
+.volume-bar {
+    background: black;
+    position: absolute;
+    height: 100%;
+}
+
+.seek-point,
+.volume-point {
+    border-radius: 100%;
+    width: 16px;
+    height: 16px;
+    background: black;
+    position: relative;
+    top: -6px;
+    pointer-events: none;
+}

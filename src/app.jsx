@@ -1,0 +1,2 @@
+var injectScript = function() {
+}

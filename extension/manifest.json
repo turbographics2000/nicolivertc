@@ -1,0 +1,29 @@
+{
+    "manifest_version": 2,
+    "name": "ニコ生RTC",
+    "description": "ニコ生の補助配信としてWebRTCを使用して配信を行う拡張機能",
+    "version": "0.0.1",
+    "externally_connectable": {
+        "matches": [
+            "http://live2.nicovideo.jp/watch/*"
+        ]
+    },
+    "background": {
+        "scripts": [
+            "bg.js"
+        ],
+        "persistent": false
+    },
+    "content_scripts": [
+        {
+            "matches": [
+                "http://live2.nicovideo.jp/watch/*"
+            ],
+            "js": [
+                "peer.min.js",
+                "peerjsextend.js",
+                "cs.js"
+            ]
+        }
+    ]
+}

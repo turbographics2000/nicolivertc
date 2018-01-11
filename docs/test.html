@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title></title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script   src="mixed-onready.js"></script>
+</head>
+
+<body>
+    <video id="vid" controls src="Example.ogg"></video>
+    <script>
+        // vid.onloadedmetadata = evt => {
+        //     console.log(vid.videoWidth, vid.videoHeight);
+        // }
+        // async function load() {
+        //     let bin = await fetch('avatar_y.png').then(res => res.arrayBuffer()).then(ab => new Uint32Array(ab, 0, 2));;
+        //     console.log('png', `${bin[0].toString(16)}`);
+        //     bin = await fetch('d.jpg').then(res => res.arrayBuffer()).then(ab => new Uint32Array(ab, 0, 2));
+        //     console.log('jpg', `${bin[0].toString(16)}`);
+        //     bin = await fetch('beep.mp3').then(res => res.arrayBuffer()).then(ab => new Uint32Array(ab, 0, 2));
+        //     console.log('mp3', `${bin[0].toString(16)}`);
+        //     bin = await fetch('alarm07.wav').then(res => res.arrayBuffer()).then(ab => new Uint32Array(ab, 0, 2));
+        //     console.log('wav', `${bin[0].toString(16)}`);
+        //     bin = await fetch('Sample_BeeMoved_96kHz24bit.flac').then(res => res.arrayBuffer()).then(ab => new Uint32Array(ab, 0, 2));
+        //     console.log('flac', `${bin[0].toString(16)}`);
+        //     bin = await fetch('Example.ogg').then(res => res.arrayBuffer()).then(ab => new Uint32Array(ab, 0, 2));
+        //     console.log('ogg', `${bin[0].toString(16)}`);
+        //     bin = await fetch('sintel.mp4').then(res => res.arrayBuffer()).then(ab => new Uint32Array(ab, 0, 2));
+        //     console.log('mp4', `${bin[1].toString(16)}`);
+        //     bin = await fetch('test.webm').then(res => res.arrayBuffer()).then(ab => new Uint32Array(ab, 0, 4));
+        //     console.log('webm', `${bin[0].toString(16)}`);
+
+        //     // let blob = await fetch('sintel.png').then(res => res.blob());
+        //     // console.log('type', blob.type);
+        //     // let url = URL.createObjectURL(blob);
+        //     // await imgLoad(url, 'sintel.png');
+        //     // await audioLoad(url, 'sintel.png');
+        //     // await videoLoad(url, 'sintel.png');
+        //     // blob = await fetch('beep.png').then(res => res.blob());
+        //     // console.log('type', blob.type);
+        //     // url = URL.createObjectURL(blob);
+        //     // await imgLoad(url, 'beep.png');
+        //     // await audioLoad(url, 'beep.png');
+        //     // await videoLoad(url, 'beep.png');
+        //     // blob = await fetch('avatar_y.png').then(res => res.blob());
+        //     // console.log('type', blob.type);
+        //     // url = URL.createObjectURL(blob);
+        //     // await imgLoad(url, 'avatar_y.png');
+        //     // await audioLoad(url, 'avatar_y.png');
+        //     // await videoLoad(url, 'avatar_y.png');
+        // }
+
+        // load();
+
+        // function imgLoad(url, name) {
+        //     return new Promise((resolve, reject) => {
+        //         const img = new Image();
+        //         img.onload = function () {
+        //             console.log(`img loaded. ${name}`);
+        //             resolve();
+        //         };
+        //         img.onerror = function (evt) {
+        //             console.log(`img error. ${name}`, evt);
+        //             resolve();
+        //         };
+        //         img.src = url;
+        //     });
+        // }
+
+        // function audioLoad(url, name) {
+        //     return new Promise((resolve, reject) => {
+        //         const audio = new Audio();
+        //         audio.onloadedmetadata = function (evt) {
+        //             console.log(`audio loaded. ${name}`);
+        //             resolve();
+        //         }
+        //         audio.onerror = function (evt) {
+        //             console.log(`audio error. ${name}`, evt);
+        //             resolve();
+        //         }
+        //         audio.src = url;
+        //     });
+        // }
+
+        // function videoLoad(url, name) {
+        //     return new Promise((resolve, reject) => {
+        //         const video = document.createElement('video');
+        //         video.onloadedmetadata = function (evt) {
+        //             console.log(`video loaded. name:${name} width:${this.videoWidth}, height:${this.videoHeight}`);
+        //             resolve();
+        //         };
+        //         video.onerror = function (evt) {
+        //             console.log(`video error. ${name}`, evt);
+        //             resolve();
+        //         }
+        //         video.src = url;
+        //     });
+        // }
+    </script>
+</body>
+
+</html>

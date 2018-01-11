@@ -1,0 +1,30 @@
+{
+  "name": "nicolivertc",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/turbographics2000/nicolivertc.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/turbographics2000/nicolivertc/issues"
+  },
+  "homepage": "https://github.com/turbographics2000/nicolivertc#readme",
+  "devDependencies": {
+    "webpack-dev-server": "^2.9.5"
+  },
+  "dependencies": {
+    "react": "^16.2.0",
+    "react-dom": "^16.2.0"
+  }
+}

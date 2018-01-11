@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title></title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="window.css">
+</head>
+
+<body>
+    <div id="inputList" class="list">
+        <div class="tab-container">
+            <div class="tab selected">カメラ/マイク</div>
+            <div class="tab">メディア</div>
+            <div class="tab">スクリーン</div>
+        </div>
+        <div class="tab-hilighter-container">
+            <div class="tab-hilighter"></div>
+        </div>
+        <div class="tab-content-container">
+            <div class="capture-device-list tab-content">
+                <div class="tab-container">
+                    <div class="tab selected">カメラ</div>
+                    <div class="tab">マイク</div>
+                </div>
+                <div class="tab-hilighter-container">
+                    <div class="tab-hilighter"></div>
+                </div>
+                <div class="tab-content-container">
+                    <div id="cameraList" class="tab-content">
+                        <div class="list-body"></div>
+                    </div>
+                    <div id="micList" class="tab-content">
+                        <div class="list-body"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="media-list tab-content">
+                <div class="tab-container">
+                    <div class="tab selected">ビデオ</div>
+                    <div class="tab">オーディオ</div>
+                </div>
+                <div class="tab-hilighter-container">
+                    <div class="tab-hilighter"></div>
+                </div>
+                <div class="tab-content-container">
+                    <div id="videoList" class="tab-content">
+                        <div class="list-body"></div>
+                    </div>
+                    <div id="audioList" class="tab-content">
+                        <div class="list-body"></div>
+                    </div>
+                </div>
+            </div>
+            <div id="desktopList" class="tab-content">
+                <button id="btnAddWindowCapture">キャプチャー画面追加</button>
+            </div>
+        </div>
+    </div>
+    <div id="layoutArea">
+        <canvas id="bkCnv"></canvas>
+        <canvas id="cnv"></canvas>
+        <canvas id="bbCnv"></canvas>
+    </div>
+    <div id="audioArea">
+        <div class="list-body"></div>
+    </div>
+    <div class="controlpanel-container">
+        <div class="list-container">
+            <span class="list-title">シーン</span>
+            <div id="sceneList">
+                <div class="list-body selectable"></div>
+                <div class="list-button-container">
+                    <div class="list-button material-icons list-add-button">add</div>
+                    <div class="list-button material-icons list-remove-button">remove</div>
+                    <div class="list-button material-icons list-up-button">keyboard_arrow_up</div>
+                    <div class="list-button material-icons list-down-button">keyboard_arrow_down</div>
+                </div>
+            </div>
+        </div>
+        <div class="list-container">
+            <span class="list-title">ソース</span>
+            <div id="sourceList">
+                <div class="list-body selectable"></div>
+                <div class="list-button-container">
+                    <div class="list-button material-icons list-add-button">add</div>
+                    <div class="list-button material-icons list-remove-button">remove</div>
+                    <!-- <div cass="list-button material-icons list-setting-button">settings</div> -->
+                    <div class="list-button material-icons list-up-button">keyboard_arrow_up</div>
+                    <div class="list-button material-icons list-down-button">keyboard_arrow_down</div>
+                </div>
+            </div>
+        </div>
+        <div class="mixer list-container">
+            <span class="list-title">ミキサー</span>
+            <div id="mixerList">
+                <div class="list-body"></div>
+            </div>
+        </div>
+        <div class="transition list-container">
+            <span class="list-title">トランジション</span>
+            <div>
+                <select id="transitionSelect">
+                    <option value="cut">カット</option>
+                    <option value="fade">フェード</option>
+                    <option value="swipe">スワイプ</option>
+                </select>
+                <input type="number" id="transitionTime">
+                <span>ms</span>
+                <div class="list-button-container" style="display: none">
+                    <div class="list-button material-icons list-setting-button"></div>
+                    <div class="list-button material-icons list-remove-button">remove</div>
+                    <div class="list-button material-icons list-add-button list-button">add</div>
+                </div>
+            </div>
+        </div>
+        <div class="broadcast-button-container">
+            <div id="btnBroadcast">配信開始</div>
+        </div>
+    </div>
+    <div class="dialog-mask" style="display: none">
+        <div class="dialog" style="display: none">
+            <div class="dialog-description"></div>
+            <input type="text" class="dialog-input">
+            <select class="dialog-select"></select>
+            <div class="dialog-warnings"></div>
+            <div class="dialog-notes"></div>
+            <div class="dialog-radiobuttons">
+                <div class="dialog-radiobuttons-title"></div>
+                <div class="dialog-radiobuttons-container"></div>
+            </div>
+            <div class="dialog-dontaskmeagain">
+                <div class="checkbox">
+                    <i class="material-icons">check</i>
+                </div>
+                <span>以降、同様の質問をスキップ</span>
+            </div>
+            <div class="dialog-button-container">
+                <div class="dialog-ok-button dialog-button">はい</div>
+                <div class="dialog-cancel-button dialog-button">いいえ</div>
+            </div>
+        </div>
+    </div>
+    <script type="module" src="main.js" defer></script>
+</body>
+
+</html>

@@ -1,0 +1,27 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+      {
+          "name": "Launch",
+          "type": "node",
+          "request": "launch",
+          "runtimeExecutable": "${workspaceRoot}\\node_modules\\.bin\\webpack-dev-server",
+          "runtimeArgs": [
+            //   "-d",
+            //   "--config",
+            //   "webpack/default.js"
+          ],
+          "port": 1234,
+          "outFiles": [
+              "${workspaceRoot}/docs/*.js"
+          ],
+          "stopOnEntry": false,
+          "cwd": "${workspaceRoot}",
+          "env": {
+              "NODE_ENV": "development"
+          },
+          "console": "internalConsole",
+          "sourceMaps": true
+      }
+    ]
+}
