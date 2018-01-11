@@ -9,7 +9,7 @@ export class DesktopListController extends ListController {
     constructor(selector, options = {}) {
         super(selector, Object.assign({}, options, {
             selectable: false,
-            items: new ItemManager()
+            items: new ItemManager({})
         }));
     }
 
