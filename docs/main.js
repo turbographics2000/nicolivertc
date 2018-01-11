@@ -154,8 +154,7 @@ btnCaptureScreen.onclick = evt => {
 };
 
 window.addEventListener('desktopStreamId', evt => {
-    const streamId = evt.detail;
-    desktopListView.addItem(streamId);
+    desktopListView.getItems(evt.detail);
 });
 
 //cameraList.getItems();

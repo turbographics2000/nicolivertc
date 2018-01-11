@@ -13,7 +13,7 @@ export class DesktopListController extends ListController {
         }));
     }
 
-    getItems(streamId, type) {
+    getItems({streamId, type}) {
         navigator.mediaDevices.getUserMedia({
             video: {
                 mandatory: {
