@@ -22,6 +22,7 @@ export class DesktopListController extends ListController {
             }
         }).then(stream => {
             const video = document.createElement('video');
+            video.autoplay = true;
             video.onloadedmetadata = evt => {
                 const item = {
                     name: util.generateUnusedValue(type, this.list),
