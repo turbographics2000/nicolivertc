@@ -88,14 +88,14 @@ const audioListView = new AudioListController('#audioList');
 const sceneListView = new SceneListController('#sceneList');
 const sourceListView = new SourceListController('#sourceList');
 const mixerListView = new MixerListController('#mixerList');
-window.layout = new LayoutController({ 
+window.layout = new LayoutController({
     cameraListView,
     micListView,
     audioListView,
-    videoListView, 
-    sceneListView, 
-    sourceListView, 
-    data 
+    videoListView,
+    sceneListView,
+    sourceListView,
+    data
 });
 window.dataLoading = false;
 
@@ -123,9 +123,9 @@ layout.on('dropped', item => {
 });
 
 sourceListView.on('itemAdded', (index, item) => {
-    if(item.mediaType === 'audio') {
+    if (item.mediaType === 'audio') {
         audioListView.addItem(item);
-    } else if(item.mediaType === 'video') {
+    } else if (item.mediaType === 'video') {
         videoListView.addItem(item);
     }
 });
@@ -138,10 +138,35 @@ setTimeout(() => {
     layout.onResize();
 }, 0);
 
-btnAddWindowCapture.onclick = evt => {
-    const customEvent = new CustomEvent('request');
+btnCaptureWindow.onclick = evt => {
+    const customEvent = new CustomEvent('request', {detail: 'window'});
     window.dispatchEvent(customEvent);
-}
+};
+btnCaptureTab.onclick = evt => {
+    const customEvent = new CustomEvent('request', {detail: 'tab'});
+    window.dispatchEvent(customEvent);
+};
+btnCaptureScreen.onclick = evt => {
+    const customEvent = new CustomEvent('request', {detail: 'screen'});
+    window.dispatchEvent(customEvent);
+};
+
+window.addEventListener('desktopStreamId', evt => {
+    const streamId = evt.detail;
+    navigator.mediaDevices.getUserMedia({
+        video: {
+            mandatory: {
+                chromeMediaSource: 'desktop',
+                chromeMediaSourceId: streamId
+            }
+        }
+    }).then(stream => {
+        const video = document.createElement('video');
+
+    }).catch(err => {
+        console.log('desktop capture error', err);
+    })
+})
 
 //cameraList.getItems();
 
