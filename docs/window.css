@@ -177,7 +177,8 @@ button,
     height: calc(100% - 30px);
 }
 
-#cameraList .item {
+#cameraList .item,
+#desktopList .item {
     cursor: pointer;
     width: 240px;
     height: 135px;
@@ -186,7 +187,8 @@ button,
     margin: 10px auto;
 }
 
-#cameraList .item-header {
+#cameraList .item-header,
+#desktopList .item-header {
     position: absolute;
     line-height: 30px;
     vertical-align: middle;
@@ -197,7 +199,8 @@ button,
     z-index: 1;
 }
 
-#cameraList video {
+#cameraList video,
+#desktopList video {
     position: absolute;
     left: 0;
     top: 0;
