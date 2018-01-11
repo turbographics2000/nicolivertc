@@ -13,31 +13,6 @@ export class VideoListController extends ListController {
         }));
     }
 
-    setupAudioPlayer(item) {
-        const playingPosition = document.createElement('div');
-        playingPosition.classList.add('source-playingposition');
-        playingPosition.style.display = 'none';
-        let audioPlayingId = null;
-
-        item.target.onplay = function (evt) {
-            playingPosition.style.display = '';
-            audioPlaying();
-        };
-        item.target.onpause = function (evt) {
-            playingPosition.style.display = 'none';
-            if (audioPlayingId) {
-                cancelAnimationFrame(audioPlayingId);
-                audioPlayingId = null;
-            }
-        };
-        function audioPlaying() {
-            audioPlayingId = requestAnimationFrame(audioPlaying);
-            // TODO　マジックナンバーで指定しているのを何とかする
-            playingPosition.style.left = `${item.target.currentTime / item.target.duration * 318}px`;
-        }
-        return playingPosition;
-    }
-
     createItemElement(item, container, index) {
         const itemHeader = util.newElm({
             textContent: item.name,
@@ -57,21 +32,21 @@ export class VideoListController extends ListController {
         this.container.appendChild(itemElm);
     }
 
-    onDragStart(evt) {
-        console.log(evt.currentTarget, evt.target);
-        // Firefoxではデータがセットされてないとダメ
-        evt.dataTransfer.setData('text/plain', 'dummy');
-        const video = evt.target.querySelector('video');
-        this.draggingTarget = {
-            name: evt.target.querySelector('.drag-target-name').textContent,
-            target: video,
-            type: 'video',
-            width: video.videoWidth,
-            height: video.videoHeight
-        };
-    }
+    // onDragStart(evt) {
+    //     console.log(evt.currentTarget, evt.target);
+    //     // Firefoxではデータがセットされてないとダメ
+    //     evt.dataTransfer.setData('text/plain', 'dummy');
+    //     const video = evt.target.querySelector('video');
+    //     this.draggingTarget = {
+    //         name: evt.target.querySelector('.drag-target-name').textContent,
+    //         target: video,
+    //         type: 'video',
+    //         width: video.videoWidth,
+    //         height: video.videoHeight
+    //     };
+    // }
 
-    onDragEnd(evt) {
-        this.draggingTarget = null;
-    }
+    // onDragEnd(evt) {
+    //     this.draggingTarget = null;
+    // }
 }

@@ -6,6 +6,7 @@ import { MicListController } from './mic/MicListController.js';
 import { VideoListController } from './video/VideoListController.js';
 import { AudioListController } from './audio/AudioListController.js';
 import { LayoutController } from './layout/LayoutController.js';
+import { DesktopListController } from './desktop/VideoListController.js';
 import util from './base/util.js';
 
 
@@ -88,6 +89,7 @@ const audioListView = new AudioListController('#audioList');
 const sceneListView = new SceneListController('#sceneList');
 const sourceListView = new SourceListController('#sourceList');
 const mixerListView = new MixerListController('#mixerList');
+const desktopListView = new DesktopListController('#desktopList');
 window.layout = new LayoutController({
     cameraListView,
     micListView,
@@ -153,20 +155,8 @@ btnCaptureScreen.onclick = evt => {
 
 window.addEventListener('desktopStreamId', evt => {
     const streamId = evt.detail;
-    navigator.mediaDevices.getUserMedia({
-        video: {
-            mandatory: {
-                chromeMediaSource: 'desktop',
-                chromeMediaSourceId: streamId
-            }
-        }
-    }).then(stream => {
-        const video = document.createElement('video');
-
-    }).catch(err => {
-        console.log('desktop capture error', err);
-    })
-})
+    desktopListView.addItem(streamId);
+});
 
 //cameraList.getItems();
 
