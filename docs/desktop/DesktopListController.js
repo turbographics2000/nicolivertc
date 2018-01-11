@@ -1,3 +1,4 @@
+import { ItemManager } from '../base/ItemManager.js';
 import { ListController } from '../base/ListController.js';
 import { DialogController } from '../base/DialogController.js';
 import { PlayerController } from '../base/PlayerController.js';
@@ -8,7 +9,7 @@ export class DesktopListController extends ListController {
     constructor(selector, options = {}) {
         super(selector, Object.assign({}, options, {
             selectable: false,
-            items: new ItemManager(options)
+            items: new ItemManager()
         }));
     }
 
