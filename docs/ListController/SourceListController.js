@@ -94,7 +94,7 @@ export class SourceListController extends ListController {
         if(this.selectedItem.webGLObj) {
             this.selectedItem.webGLObj.dispose();
             
-            this.selectedItem.webGLObj = 
+            //this.selectedItem.webGLObj = 
         }
         this.updateControls(this.selectedItem);
     }
