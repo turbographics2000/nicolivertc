@@ -9,75 +9,129 @@
     <link rel="stylesheet" href="window.css">
 </head>
 
-<body>
-    <div id="inputList" class="list">
+<body class="grid theme-text-color theme-color-d2">
+    <div id="themeTextColor" class="theme-text-color"></div>
+    <div id="themeBorderColor" class="theme-border-color"></div>
+    <div id="themeColorL1" class="theme-color-l1"></div>
+    <div id="themeColor" class="theme-color"></div>
+    <div id="themeColorD1" class="theme-color-d1"></div>
+    <div id="themeColorD2" class="theme-color-d2"></div>
+
+    <div id="inputList" class="list theme-color-d1" style="display:none">
         <div class="tab-container">
-            <div class="tab selected">カメラ/マイク</div>
-            <div class="tab">メディア</div>
-            <div class="tab">デスクトップ</div>
+            <div class="tab selected" data-type="capture">キャプチャー</div>
+            <div class="tab" data-type="media">メディア</div>
         </div>
         <div class="tab-hilighter-container">
-            <div class="tab-hilighter"></div>
+            <div id="categoryTabHilighter" class="tab-hilighter"></div>
         </div>
         <div class="tab-content-container">
-            <div class="capture-device-list tab-content">
+            <div id="captureList" class="capture-device-list tab-content">
                 <div class="tab-container">
-                    <div class="tab selected">カメラ</div>
-                    <div class="tab">マイク</div>
+                    <div class="tab selected" data-type="camera">カメラ</div>
+                    <div class="tab" data-type="mic">マイク</div>
+                    <div class="tab" data-type="desktop">スクリーン</div>
                 </div>
                 <div class="tab-hilighter-container">
-                    <div class="tab-hilighter"></div>
+                    <div id="captureTabHilighter" class="tab-hilighter"></div>
                 </div>
                 <div class="tab-content-container">
                     <div id="cameraList" class="tab-content">
-                        <div class="list-body"></div>
+                        <div class="list-body theme-color-d2"></div>
                     </div>
                     <div id="micList" class="tab-content">
-                        <div class="list-body"></div>
+                        <div class="list-body theme-color-d2"></div>
+                    </div>
+                    <div id="desktopList" class="tab-content">
+                        <div class="list-body theme-color-d2">
+                            <div class="screen-buttons-container">
+                                <button id="btnCaptureWindow" class="theme-text-color theme-color-l1">ウィンドウ</button>
+                                <button id="btnCaptureTab" class="theme-text-color theme-color-l1">Chromeタブ</button>
+                                <button id="btnCaptureScreen" class="theme-text-color theme-color-l1">スクリーン</button>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
-            <div class="media-list tab-content">
+            <div id="mediaList" class="media-list tab-content">
                 <div class="tab-container">
-                    <div class="tab selected">ビデオ</div>
-                    <div class="tab">オーディオ</div>
+                    <div class="tab selected" data-type="video">動画</div>
+                    <div class="tab" data-type="audio">音声</div>
+                    <div class="tab" data-type="image">画像</div>
+                    <!-- <div class="tab" data-type="text">文字</div> -->
                 </div>
                 <div class="tab-hilighter-container">
-                    <div class="tab-hilighter"></div>
+                    <div id="mediaTabHilighter" class="tab-hilighter"></div>
                 </div>
                 <div class="tab-content-container">
                     <div id="videoList" class="tab-content">
-                        <div class="list-body"></div>
+                        <div class="list-body theme-color-d2">
+                            <div id="videoListDropArea" class="drop-area">
+                                ここにドロップするとメディアリストにメディアが登録されます。
+                                <br>(シーンには追加されません。)
+                            </div>
+                        </div>
                     </div>
                     <div id="audioList" class="tab-content">
-                        <div class="list-body"></div>
+                        <div class="list-body theme-color-d2">
+                            <div id="audioListDropArea" class="drop-area">
+                                ここにドロップするとメディアリストにメディアが登録されます。
+                                <br>(シーンには追加されません。)
+                            </div>
+                        </div>
+                    </div>
+                    <div id="imageList" class="tab-content">
+                        <div class="list-body theme-color-d2">
+                            <div id="imageListDropArea" class="drop-area">
+                                ここにドロップするとメディアリストにメディアが登録されます。
+                                <br>(シーンには追加されません。)
+                            </div>
+                        </div>
+                    </div>
+                    <div id="textList" class="tab-content">
+                        <div class="list-body theme-color-d2">
+                            <div id="textListDropArea" class="drop-area">
+                                ここにドロップするとメディアリストにメディアが登録されます。
+                                <br>(シーンには追加されません。)
+                            </div>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div id="desktopList" class="tab-content">
-                <div>
-                    <button id="btnCaptureWindow">ウィンドウ</button>
-                    <button id="btnCaptureTab">Chromeタブ</button>
-                    <button id="btnCaptureScreen">スクリーン</button>
-                </div>
-                <div class="list-body"></div>
             </div>
         </div>
     </div>
     <div id="layoutArea">
-        <canvas id="bkCnv"></canvas>
-        <canvas id="cnv"></canvas>
-        <canvas id="bbCnv"></canvas>
+        <div id="layoutWrap" class="theme-color">
+            <canvas id="bkCnv"></canvas>
+            <canvas id="cnv" class="bkblack" style="display:none"></canvas>
+            <canvas id="bbCnv"></canvas>
+            <div id="layoutAreaDropArea" class="drop-area">
+                ここにドロップするとシーンに追加します。
+                <br>(同時に、メディアリストにメディアが登録されます。)
+            </div>
+        </div>
     </div>
-    <div id="audioArea">
-        <div class="list-body"></div>
+    <div id="sceneAudioList" class="theme-color-d1">
+        <div class="list-body grid theme-color-d2 selectable"></div>
     </div>
-    <div class="controlpanel-container">
+    <div id="controlPanelConainer" class="theme-color-d1">
         <div class="list-container">
-            <span class="list-title">シーン</span>
+            <span class="list-title">
+                <span>シーン</span>
+                <div class="transition-container">
+                    <span>トランジション</span>
+                    <select id="transitionSelect">
+                        <option value="cut">カット</option>
+                        <option value="fade">フェード</option>
+                        <option value="swipe">スワイプ</option>
+                    </select> 
+                    <input type="number" id="transitionTime"> 
+                    <span>ms</span>
+                </div>
+            </span>
             <div id="sceneList">
-                <div class="list-body selectable"></div>
-                <div class="list-button-container">
+                <div class="list-body selectable theme-color-d2"></div>
+                <div class="list-button-container theme-color">
                     <div class="list-button material-icons list-add-button">add</div>
                     <div class="list-button material-icons list-remove-button">remove</div>
                     <div class="list-button material-icons list-up-button">keyboard_arrow_up</div>
@@ -88,9 +142,9 @@
         <div class="list-container">
             <span class="list-title">ソース</span>
             <div id="sourceList">
-                <div class="list-body selectable"></div>
-                <div class="list-button-container">
-                    <div class="list-button material-icons list-add-button">add</div>
+                <div class="list-body selectable theme-color-d2"></div>
+                <div class="list-button-container theme-color">
+                    <!-- <div class="list-button material-icons list-add-button">add</div> -->
                     <div class="list-button material-icons list-remove-button">remove</div>
                     <!-- <div cass="list-button material-icons list-setting-button">settings</div> -->
                     <div class="list-button material-icons list-up-button">keyboard_arrow_up</div>
@@ -101,32 +155,15 @@
         <div class="mixer list-container">
             <span class="list-title">ミキサー</span>
             <div id="mixerList">
-                <div class="list-body"></div>
-            </div>
-        </div>
-        <div class="transition list-container">
-            <span class="list-title">トランジション</span>
-            <div>
-                <select id="transitionSelect">
-                    <option value="cut">カット</option>
-                    <option value="fade">フェード</option>
-                    <option value="swipe">スワイプ</option>
-                </select>
-                <input type="number" id="transitionTime">
-                <span>ms</span>
-                <div class="list-button-container" style="display: none">
-                    <div class="list-button material-icons list-setting-button"></div>
-                    <div class="list-button material-icons list-remove-button">remove</div>
-                    <div class="list-button material-icons list-add-button list-button">add</div>
-                </div>
+                <div class="list-body theme-color-d2"></div>
             </div>
         </div>
         <div class="broadcast-button-container">
-            <div id="btnBroadcast">配信開始</div>
+            <div id="btnBroadcast" class="button">配信開始</div>
         </div>
     </div>
     <div class="dialog-mask" style="display: none">
-        <div class="dialog" style="display: none">
+        <div class="dialog theme-color-d1" style="display: none">
             <div class="dialog-description"></div>
             <input type="text" class="dialog-input">
             <select class="dialog-select"></select>
@@ -143,8 +180,8 @@
                 <span>以降、同様の質問をスキップ</span>
             </div>
             <div class="dialog-button-container">
-                <div class="dialog-ok-button dialog-button">はい</div>
-                <div class="dialog-cancel-button dialog-button">いいえ</div>
+                <div class="dialog-ok-button dialog-button button">はい</div>
+                <div class="dialog-cancel-button dialog-button button">いいえ</div>
             </div>
         </div>
     </div>

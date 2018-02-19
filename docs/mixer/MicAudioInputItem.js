@@ -36,7 +36,7 @@ export class MicAudioInputItem extends AudioInputItem {
         this._deviceId = value;
     }
 
-    get constraints() {
+    async getConstraints() {
         return {
             audio: { deviceId: this.deviceId },
             video: false
@@ -49,8 +49,8 @@ export class MicAudioInputItem extends AudioInputItem {
 
     getDevice(devId) {
         return this.enumDevices().then(devices => {
-            const devices = devices.filter(device => device.deviceId === devId);
-            return devices.length === 1 ? device : null;
+            devices = devices.filter(device => device.deviceId === devId);
+            return devices.length === 1 ? devices[0] : null;
         });
     }
 

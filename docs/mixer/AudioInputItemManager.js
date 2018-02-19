@@ -7,15 +7,15 @@ export class AudioInputItemManager extends ItemManager {
         super(options);
 
         const micItem = new MicAudioInputItem({ name: '既定' });
-        const desktopItem = new DesktopAudioInputItem({});
+        //const desktopItem = new DesktopAudioInputItem({});
         micItem.getStream();
-        desktopItem.getStream();
+        //desktopItem.getStream();
 
         setTimeout(_ => {
             this.add(micItem);
-            this.add(desktopItem);
+            //this.add(desktopItem);
             micItem.on('stateChanged', this.onStateChanged.bind(this));
-            desktopItem.on('stateChanged', this.onStateChanged.bind(this));
+            //desktopItem.on('stateChanged', this.onStateChanged.bind(this));
         }, 0);
     }
 

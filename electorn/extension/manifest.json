@@ -2,20 +2,19 @@
     "name": "nicolivertc拡張機能",
     "manifest_version": 2,
     "version": "0.0.1",
-    "content_scripts": [
-        {
-            "js": [
-                "cs.js"
-            ],
-            "matches": [
-                "https://turbographics2000.github.io/nicolivertc/*",
-                "http://127.0.0.1:8887/*"
-            ]
-        }
-    ],
     "background": {
+        "matches": [
+            "https://turbographics2000.github.io/nicolivertc/*",
+            "http://127.0.0.1:8887/*"
+        ],
         "scripts": [
             "bg.js"
+        ]
+    },
+    "externally_connectable": {
+        "matches": [
+            "https://turbographics2000.github.io/nicolivertc/*",
+            "http://127.0.0.1:8887/*"
         ]
     },
     "permissions": [

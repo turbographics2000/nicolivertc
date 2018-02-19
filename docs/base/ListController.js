@@ -72,7 +72,7 @@ export class ListController extends EventEmitter {
         });
         renameItem.onclick = this.onRenameClick.bind(this);
         this.contextMenu = util.newElm({
-            classes: ['flowlist'],
+            classes: ['flowlist', 'theme-color-d1'],
             children: [renameItem]
         });
         document.body.appendChild(this.contextMenu);
@@ -137,7 +137,6 @@ export class ListController extends EventEmitter {
         // Firefoxではデータがセットされてないとダメ
         evt.dataTransfer.setData('text/plain', 'dummy');
         this.draggingTarget = item;
-        console.log(this.draggingTarget);
     }
 
     onDragEnd(evt) {
@@ -168,6 +167,16 @@ export class ListController extends EventEmitter {
         this.items.down(this.selectedIndex);
     }
 
+    onItemDispose(itemId) {
+        const items = this.list.filter(item => item.id === itemId);
+        if(items.length) {
+            items.forEach(item => {
+                const index = this.list.indexOf(item);
+                this.removeItem(index);
+            });
+        }
+    }
+
     setNameDialogShow(descriptionText, value, state, exoptions) {
         const usedNameList = this.list.map(item => item.name);
         this.setNameDialog.show({
@@ -185,13 +194,13 @@ export class ListController extends EventEmitter {
                 this.items.add({ name: res.value });
                 break;
             case 'rename':
-                this.selectedItem.name = re.value;
+                this.selectedItem.name = res.value;
                 this.itemRenamed({
                     oldName: this.selectedItem.name,
                     newName: re.value,
                     index: this.selectedIndex,
                     item: this.selectedItem
-                })
+                });
                 break;
         }
     }
@@ -260,9 +269,18 @@ export class ListController extends EventEmitter {
         this.items.add(item);
     }
 
+    removeItemByElm(elm) {
+        const index = this.getIndexFromElement(elm);
+        if(index !== -1) {
+            this.removeItem(index);
+        }
+    }
+
     removeItem(index) {
         this.items.remove(index);
     }
+
+    removeItem(elm, isSource) {}
 
     itemAdded({ index, item }) {
         if (this.data) {

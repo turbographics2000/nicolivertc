@@ -1,6 +1,6 @@
 import { EventEmitter } from "../lib/EventEmitter.js";
 
-export class DeviceWatcher extends EventEmitter {
+class DeviceWatcher extends EventEmitter {
     constructor(kind) {
         super({});
         this.deviceIds = null;
@@ -29,10 +29,10 @@ export class DeviceWatcher extends EventEmitter {
         const connectCameraDevices = connectDevices.filter(device => device.kind === 'videoinput');
         const connectMicDevices = connectDevices.filter(device => device.kind === 'audioinput');
         if (connectCameraDevices.length) {
-            this.emit('connectCamera', connectCameraDevices);
+            this.emit('connectedCamera', connectCameraDevices);
         }
         if (connectMicDevices.length) {
-            this.emit('connectMic', connectMicDevices);
+            this.emit('connecedtMic', connectMicDevices);
         }
 
         const disconnectDeviceIds = this.deviceIds.filter(deviceId => !deviceIds.includes(deviceId));
@@ -40,13 +40,15 @@ export class DeviceWatcher extends EventEmitter {
         const disconnectCameraDevices = disconnectDevices.filter(device => device.kind === 'videoinput');
         const disconnectMicDevices = disconnectDevices.filter(device => device.kind === 'audioinput');
         if (disconnectCameraDevices.length) {
-            this.emit('disconnectCamera', disconnectCameraDevices);
+            this.emit('disconnectedCamera', disconnectCameraDevices);
         }
         if (disconnectMicDevices.length) {
-            this.emit('disconnectMic', disconnectMicDevices);
+            this.emit('disconnecedtMic', disconnectMicDevices);
         }
 
         this.deviceIds = deviceIds;
         this.devices = devices;
     }
 }
+
+export default new DeviceWatcher();

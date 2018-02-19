@@ -75,7 +75,7 @@ export class DialogController extends EventEmitter {
             this.btnCancel.textContent = 'いいえ';
             this.btnCancel.style.display = !!options.btnCancel ? '' : 'none';
         } else {
-            this.btnOK.textContent = 'OK';
+            this.btnOK.textContent = 'ＯＫ';
             this.btnCancel.textContent = 'キャンセル';
             if (this.type === 'ok_cancel') this.btnCancel.style.display = !!options.btnCancel ? '' : 'none';
         }

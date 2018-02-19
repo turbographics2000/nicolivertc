@@ -1,6 +1,7 @@
 import { EventEmitter } from '../base/EventEmitter.js';
-import util from '../base/util.js';
 import { DialogController } from '../base/DialogController.js';
+import util from '../base/util.js';
+import WebOBSData from '../base/WebOBSData.js';
 
 export class LayoutController extends EventEmitter {
     constructor(options) {
@@ -11,6 +12,7 @@ export class LayoutController extends EventEmitter {
         this.cnv = cnv;
         this.bbCnv = bbCnv;
         this.bkCtx = this.bkCnv.getContext('2d');
+        this.bkCtxFillStyle = document.defaultView.getComputedStyle(themeColorL1).backgroundColor;
         this.ctx = this.cnv.getContext('2d');
         this.bbCtx = this.bbCnv.getContext('2d');
         this.scale = 1;
@@ -21,8 +23,10 @@ export class LayoutController extends EventEmitter {
         this.sPos = null;
         this.cameraListView = options.cameraListView;
         this.micListView = options.micListView;
+        this.desktopListView = options.desktopListView;
         this.audioListView = options.audioListView;
         this.videoListView = options.videoListView;
+        this.imageListView = options.imageListView;
         this.sceneListView = options.sceneListView;
         this.sourceListView = options.sourceListView;
         this.sourceListView.on('sceneChanged', this.redraw.bind(this));
@@ -56,163 +60,129 @@ export class LayoutController extends EventEmitter {
         this.bbCnv.onmousedown = this.onMouseDown.bind(this);
         this.bbCnv.onmousemove = this.onMouseMove.bind(this);
         this.bbCnv.onmouseup = this.onMouseUp.bind(this);
-        window.addEventListener('resize', this.onResize.bind(this));
+        window.onresize = this.onResize.bind(this);
+        setTimeout(() => {
+            this.onResize();
+            this.cnv.style.display = '';
+        }, 0);
 
         this.onResize();
         this.ctxRender();
+
+        WebOBSData.on('selected scene changed', this.onSceneChanged.bind(this));
+        WebOBSData.on('selected source changed', this.bbCtxRender.bind(this));
+        WebOBSData.on('propertyChanged', this.bbCtxRender.bind(this));
     }
 
     get scene() {
-        return this.sceneListView.selectedItem;
+        return WebOBSData.getSelectedItem('scene');
     }
 
     get items() {
-        return this.sourceListView.list;
+        return WebOBSData.getItems('source');
     }
 
     get selectedItem() {
-        return this.sourceListView.selectedItem;
+        let item = WebOBSData.getSelectedItem('source');
+        if (item && item.locked) item = null;
+        return item;
     }
 
-    redraw(arg) {
-        // TODO トランジションをスタックさせるか？
-        if (arg && transitionTime.value) {
-            this.transitionTime = transitionTime.valueAsNumber;
-            this.transitionEndTime = Date.now() + transitionTime.valueAsNumber;
-            if (data.items[arg.oldIndex] && data.items[arg.oldIndex].items) {
-                this.oldItems = data.items[arg.oldIndex].items;
-            } else {
-                this.oldItems = [];
-            }
-            this.transition = transitionSelect.value;
-        }
+    get cnvLeft() {
+        return parseInt(this.cnv.style.left) / this.scale;
+    }
+
+    get cnvTop() {
+        return parseInt(this.cnv.style.top) / this.scale;
+    }
+
+    onSceneChanged({ oldItem }) {
+        this.oldItems = oldItem.items;
+        this.transitionTime = WebOBSData.transitionTime;
+        this.transitionEndTime = Date.now() + this.transitionTime;
         this.bbCtxRender();
-    }
-
-    convToReal(evt) {
-        return {
-            x: evt.offsetX / this.scale - this.cnvLeft,
-            y: evt.offsetY / this.scale - this.cnvTop
-        };
-    }
-
-    hitTestHandle(testPos, px, py) {
-        return px - this.hhs < testPos.x &&
-            px + this.hhs > testPos.x &&
-            py - this.hhs < testPos.y &&
-            py + this.hhs > testPos.y;
-    }
-
-    hitTest(testPos) {
-        let s = this.bbCnv.style;
-        s.cursor = this.DEFAULT_CURSOR;
-        if (this.selectedItem !== null) {
-            const cx = this.selectedItem.left + this.selectedItem.width / 2;
-            const cy = this.selectedItem.top + this.selectedItem.height / 2;
-            if (this.hitTestHandle(testPos, this.selectedItem.left, this.selectedItem.top)) s.cursor = this.NW_CURSOR;
-            if (this.hitTestHandle(testPos, cx, this.selectedItem.top)) s.cursor = this.N_CURSOR;
-            if (this.hitTestHandle(testPos, this.selectedItem.right, this.selectedItem.top)) s.cursor = this.NE_CURSOR;
-            if (this.hitTestHandle(testPos, this.selectedItem.left, cy)) s.cursor = this.W_CURSOR;
-            if (this.hitTestHandle(testPos, this.selectedItem.right, cy)) s.cursor = this.E_CURSOR;
-            if (this.hitTestHandle(testPos, this.selectedItem.left, this.selectedItem.bottom)) s.cursor = this.SW_CURSOR;
-            if (this.hitTestHandle(testPos, cx, this.selectedItem.bottom)) s.cursor = this.S_CURSOR;
-            if (this.hitTestHandle(testPos, this.selectedItem.right, this.selectedItem.bottom)) s.cursor = this.SE_CURSOR;
-            if (s.cursor !== this.DEFAULT_CURSOR) return this.selectedItem;
-        }
-
-        for (let i = this.items.length; i--;) {
-            const obj = this.items[i];
-            let left = obj.left;
-            let right = obj.right;
-            let top = obj.top;
-            let bottom = obj.bottom;
-            if (obj.left > obj.right)[left, right] = [obj.right, obj.left];
-            if (obj.top > obj.bottom)[top, bottom] = [obj.bottom, obj.top];
-            if (left < testPos.x && right > testPos.x && top < testPos.y && bottom > testPos.y) {
-                this.bbCnv.style.cursor = this.MOVE_CURSOR;
-                return obj;
-            }
-        }
-        return null;
+        this.bkCtxRender();
     }
 
     onDragOver(evt) {
         evt.preventDefault();
     }
 
-    get cnvLeft() {
-        return parseInt(this.cnv.style.left) / this.scale;
-    }
-    get cnvTop() {
-        return parseInt(this.cnv.style.top) / this.scale;
-    }
-
     async onDrop(evt) {
-        const pos = this.convToReal(evt);
-        const addObj = (obj) => {
-            const halfWidth = obj.width / 2;
-            const halfHeight = obj.height / 2;
-            let objData = Object.assign({
-                visibility: true,
-                locked: false,
-                cx: pos.x,
-                cy: pos.y,
-                left: pos.x - halfWidth,
-                top: pos.y - halfHeight,
-                right: pos.x + halfWidth,
-                bottom: pos.y + halfHeight,
-                aspectRatio: obj.width ? obj.width / obj.height : 0,
-                degree360: false,
-                threeDType: '2D'
-            }, obj);
-            if (this.scene.type === 'Special') {
-                objData = Object.assign(objData, {
-                    locked: true,
-                    left: 0,
-                    top: 0,
-                    right: this.cnvSize.width - 1,
-                    bottom: this.cnvSize.height - 1,
-                    cx: this.cnvSize.width / 2,
-                    cy: this.cnvSize.height / 2,
-                    width: this.cnvSize.width,
-                    height: this.cnvSize.height,
-                    aspectRatio: this.cnvSize.aspectRatio
+        try {
+            evt.preventDefault();
+            const pos = this.convToReal(evt);
+            const addObj = (item) => {
+                const halfWidth = item.width ? item.width / 2 : 0;
+                const halfHeight = item.height ? item.height / 2 : 0;
+                item = Object.assign(item, {
+                    visibility: true,
+                    locked: false,
+                    cx: pos.x,
+                    cy: pos.y,
+                    left: pos.x - halfWidth,
+                    top: pos.y - halfHeight,
+                    right: pos.x + halfWidth,
+                    bottom: pos.y + halfHeight,
+                    aspectRatio: item.width ? item.width / item.height : 0,
+                    degree360: false,
+                    threeDType: '2D'
                 });
-                objData.left = 0;
-                objData.right = 0;
-            }
-            obj = Object.assign(obj, objData);
-            this.emit('dropped', obj);
-            this.bbCtxRender();
-        };
-        evt.preventDefault();
-        if (evt.dataTransfer.files.length) {
-            await [...evt.dataTransfer.files].forEach(async file => {
-                try {
-                    const type = await util.parseMediaFileType(file);
-                    let obj = null;
-                    if (['png', 'jpg'].includes(type)) obj = await util.imageLoad(file);
-                    if (['wav', 'mp3', 'flac'].includes(type)) obj = await util.audioLoad(file);
-                    if (['ogg', 'webm', 'mp4'].includes(type)) obj = await util.videoLoad(file);
-                    let list = [];
-                    this.data.items.forEach(sceneItem => {
-                        sceneItem.items.forEach(sourceItem => {
-                            list.push(sourceItem);
-                        });
+                if (WebOBSData.getSelectedItem('scene').special) {
+                    if (this.cnvSize.aspectRatio < item.aspectRatio) {
+                        item.height = this.cnvSize.width / item.aspectRatio;
+                        item.width = this.cnvSize.width;
+                    } else {
+                        item.width = this.cnvSize.height * item.aspectRatio;
+                        item.height = this.cnvSize.height;
+                    }
+                    item = Object.assign(item, {
+                        locked: true,
+                        left: (this.cnvSize.width - item.width) / 2,
+                        top: (this.cnvSize.height - item.height) / 2,
+                        right: this.cnvSize.width - 1,
+                        bottom: this.cnvSize.height - 1,
+                        cx: this.cnvSize.width / 2,
+                        cy: this.cnvSize.height / 2,
+                        aspectRatio: this.cnvSize.aspectRatio
                     });
-                    obj.name = util.generateUnusedValue(obj.name, list);
-                    addObj(obj);
-                } catch (err) {
-                    console.log(err);
                 }
-            });
-            this.bbCtxRender();
-        } else {
-            const target = this.cameraListView.draggingTarget ||
-                this.micListView.draggingTarget ||
-                this.audioListView.draggingTarget ||
-                this.videoListView.draggingTarget;
-            addObj(target);
+                WebOBSData.add(item.mediaType, item, true);
+                this.bbCtxRender();
+            };
+            if (evt.dataTransfer.files.length) {
+                await [...evt.dataTransfer.files].forEach(async file => {
+                    try {
+                        const type = await util.parseMediaFileType(file);
+                        let item = null;
+                        if (['png', 'jpg'].includes(type)) item = await util.imageLoad(file);
+                        if (['wav', 'mp3', 'flac'].includes(type)) item = await util.audioLoad(file);
+                        if (['ogg', 'webm', 'mp4'].includes(type)) item = await util.videoLoad(file);
+                        item.width = item.target.videoWidth || item.target.naturalWidth || 0;
+                        item.height = item.target.videoHeight || item.target.naturalHeight || 0;
+                        item.id = util.generateUUID();
+                        item.name = util.generateUnusedValue(file.name, WebOBSData.getItems(item.mediaType));
+                        if (item.mediaType === 'audio') {
+                            item.waveformImage = await util.generateWaveformImage(file, 240, 105);
+                            item.waveformThumb = await util.generateWaveformImage(file, 240, 30);
+                        }
+                        addObj(item);
+                    } catch (err) {
+                        console.log(err);
+                    }
+                });
+                this.bbCtxRender();
+            } else {
+                const target = this.cameraListView.draggingTarget ||
+                    this.micListView.draggingTarget ||
+                    this.desktopListView.draggingTarget ||
+                    this.audioListView.draggingTarget ||
+                    this.videoListView.draggingTarget ||
+                    this.imageListView.draggingTarget;
+                addObj(target);
+            }
+        } catch (e) {
+            console.log(e);
         }
     }
 
@@ -220,10 +190,9 @@ export class LayoutController extends EventEmitter {
         this.sPos = this.convToReal(evt);
 
         const selectedItem = this.hitTest(this.sPos);
-        if (this.selectedItem !== selectedItem) {
-            this.emit('selectedObjectChanged', selectedItem);
+        if (selectedItem) {
+            WebOBSData.setSelectedItem('source', selectedItem);
         }
-        if (!this.selectedItem) return;
         this.bbCtxRender();
     };
 
@@ -295,37 +264,101 @@ export class LayoutController extends EventEmitter {
 
     onResize(evt) {
         const layoutAreaPadding = 10;
-        const layoutAreaRect = layoutArea.getBoundingClientRect();
-        const layoutAreaWidth = layoutAreaRect.width - (layoutAreaPadding * 2);
-        const layoutAreaHeight = layoutAreaRect.height - (layoutAreaPadding * 2);
-        const layoutAreaAspectRatio = layoutAreaWidth / layoutAreaHeight;
+        const layoutWrapRect = layoutWrap.getBoundingClientRect();
+        const layoutWrapWidth = layoutWrapRect.width - (layoutAreaPadding * 2);
+        const layoutWrapHeight = layoutWrapRect.height - (layoutAreaPadding * 2);
+        const layoutAreaAspectRatio = layoutWrapWidth / layoutWrapHeight;
         let cnvWidth = 0;
         let cnvHeight = 0;
         if (this.cnvSize.aspectRatio > layoutAreaAspectRatio) {
-            cnvWidth = layoutAreaWidth;
+            cnvWidth = layoutWrapWidth;
             cnvHeight = cnvWidth / this.cnvSize.aspectRatio;
         } else {
-            cnvHeight = layoutAreaHeight;
+            cnvHeight = layoutWrapHeight;
             cnvWidth = cnvHeight * this.cnvSize.aspectRatio;
         }
 
         this.scale = cnvWidth / this.cnvSize.width;
         this.hhs = ((this.handleSize - 1) / 2) / this.scale;
         this.hs = this.handleSize / this.scale;
-        this.bkCnv.width = this.bbCnv.width = layoutAreaRect.width / this.scale;
-        this.bkCnv.height = this.bbCnv.height = layoutAreaRect.height / this.scale;
-        this.cnv.style.left = `${(layoutAreaRect.width - cnvWidth) / 2}px`;
-        this.cnv.style.top = `${(layoutAreaRect.height - cnvHeight) / 2}px`;
+        this.bkCnv.width = this.bbCnv.width = layoutWrapRect.width / this.scale;
+        this.bkCnv.height = this.bbCnv.height = layoutWrapRect.height / this.scale;
+        this.cnv.style.left = `${(layoutWrapRect.width - cnvWidth) / 2}px`;
+        this.cnv.style.top = `${(layoutWrapRect.height - cnvHeight) / 2}px`;
         this.cnv.style.width = `${cnvWidth}px`;
         this.cnv.style.height = `${cnvHeight}px`;
         this.bbCtxRender();
+    }
+
+    redraw(arg) {
+        // TODO トランジションをスタックさせるか？
+        if (arg && transitionTime.value) {
+            this.transitionTime = transitionTime.valueAsNumber;
+            this.transitionEndTime = Date.now() + transitionTime.valueAsNumber;
+            if (data.items[arg.oldIndex] && data.items[arg.oldIndex].items) {
+                this.oldItems = data.items[arg.oldIndex].items;
+            } else {
+                this.oldItems = [];
+            }
+            this.transition = transitionSelect.value;
+        }
+        this.bbCtxRender();
+    }
+
+    convToReal(evt) {
+        return {
+            x: evt.offsetX / this.scale - this.cnvLeft,
+            y: evt.offsetY / this.scale - this.cnvTop
+        };
+    }
+
+    hitTestHandle(testPos, px, py) {
+        return px - this.hhs < testPos.x &&
+            px + this.hhs > testPos.x &&
+            py - this.hhs < testPos.y &&
+            py + this.hhs > testPos.y;
+    }
+
+    hitTest(testPos) {
+        let s = this.bbCnv.style;
+        s.cursor = this.DEFAULT_CURSOR;
+        if (this.selectedItem) {
+            const cx = this.selectedItem.left + this.selectedItem.width / 2;
+            const cy = this.selectedItem.top + this.selectedItem.height / 2;
+            if (this.hitTestHandle(testPos, this.selectedItem.left, this.selectedItem.top)) s.cursor = this.NW_CURSOR;
+            if (this.hitTestHandle(testPos, cx, this.selectedItem.top)) s.cursor = this.N_CURSOR;
+            if (this.hitTestHandle(testPos, this.selectedItem.right, this.selectedItem.top)) s.cursor = this.NE_CURSOR;
+            if (this.hitTestHandle(testPos, this.selectedItem.left, cy)) s.cursor = this.W_CURSOR;
+            if (this.hitTestHandle(testPos, this.selectedItem.right, cy)) s.cursor = this.E_CURSOR;
+            if (this.hitTestHandle(testPos, this.selectedItem.left, this.selectedItem.bottom)) s.cursor = this.SW_CURSOR;
+            if (this.hitTestHandle(testPos, cx, this.selectedItem.bottom)) s.cursor = this.S_CURSOR;
+            if (this.hitTestHandle(testPos, this.selectedItem.right, this.selectedItem.bottom)) s.cursor = this.SE_CURSOR;
+            if (s.cursor !== this.DEFAULT_CURSOR) return this.selectedItem;
+        }
+
+        if (!this.items) return null;
+        for (let i = this.items.length; i--;) {
+            const obj = this.items[i];
+            if (obj.locked) continue;
+            let left = obj.left;
+            let right = obj.right;
+            let top = obj.top;
+            let bottom = obj.bottom;
+            if (obj.left > obj.right)[left, right] = [obj.right, obj.left];
+            if (obj.top > obj.bottom)[top, bottom] = [obj.bottom, obj.top];
+            if (left < testPos.x && right > testPos.x && top < testPos.y && bottom > testPos.y) {
+                this.bbCnv.style.cursor = this.MOVE_CURSOR;
+                return obj;
+            }
+        }
+        return null;
     }
 
     bbCtxRender() {
         const item = this.selectedItem;
         this.bbCtx.clearRect(0, 0, this.bbCnv.width, this.bbCnv.height);
         this.bkCtxRender();
-        if (!item || item.mediaType === 'audio') return;
+        if (!item || item.locked || item.mediaType === 'audio' || item.mediaType === 'mic') return;
         this.bbCtx.lineWidth = 2 / this.scale;
         this.bbCtx.strokeStyle = 'red';
         const l = item.left + this.cnvLeft;
@@ -347,8 +380,9 @@ export class LayoutController extends EventEmitter {
 
     bkCtxRender() {
         this.bkCtx.clearRect(0, 0, this.bbCnv.width, this.bbCnv.height);
+        if (!this.items) return;
         this.items.forEach(item => {
-            this.bkCtx.fillStyle = '#ddd';
+            this.bkCtx.fillStyle = this.bkCtxFillStyle;//'#ddd';
             this.bkCtx.fillRect(item.left + this.cnvLeft, item.top + this.cnvTop, item.width, item.height);
         });
     }
@@ -359,7 +393,7 @@ export class LayoutController extends EventEmitter {
         const duration = Math.max(0, this.transitionEndTime - Date.now());
         const transitionRatio = duration ? duration / this.transitionTime : 0;
         // TODO コールバックでレンダリングさせるか
-        switch (this.transition) {
+        switch (WebOBSData.transition) {
             case 'fade':
                 if (duration) {
                     this.ctx.globalAlpha = transitionRatio;
@@ -379,6 +413,7 @@ export class LayoutController extends EventEmitter {
             case 'swipe':
                 break;
             default:
+                if (!this.items) return;
                 this.items.forEach(item => {
                     if (item.target && item.width) {
                         if (item.mediaType === 'camera') {
@@ -392,8 +427,10 @@ export class LayoutController extends EventEmitter {
                                 this.ctx.fillStyle = 'white';
                                 this.ctx.fillText('接続されていません', item.left + item.width / 2, item.top + item.height / 2);
                             }
-                        } else {
-                            this.ctx.drawImage(item.target, item.left, item.top, item.width, item.height);
+                        } else if (['video', 'image', 'text'].includes(item.mediaType)) {
+                            if (item.visibility) {
+                                this.ctx.drawImage(item.target, item.left, item.top, item.width, item.height);
+                            }
                         }
                     }
                 });

@@ -1,170 +1,87 @@
-import { SceneListController } from './scene/SceneListController.js';
-import { SourceListController } from './source/SourceListController.js';
-import { MixerListController } from './mixer/MixerListController.js';
-import { CameraListController } from './camera/CameraListController.js';
-import { MicListController } from './mic/MicListController.js';
-import { VideoListController } from './video/VideoListController.js';
-import { AudioListController } from './audio/AudioListController.js';
-import { LayoutController } from './layout/LayoutController.js';
-import { DesktopListController } from './desktop/DesktopListController.js';
 import util from './base/util.js';
+import WebOBSData from './base/WebOBSData.js';
+import { SceneListController } from './ListController/SceneListController.js';
+import { SourceListController } from './ListController/SourceListController.js';
+import { MixerListController } from './ListController/MixerListController.js';
+import { CameraListController } from './ListController/CameraListController.js';
+import { MicListController } from './ListController/MicListController.js';
+import { VideoListController } from './ListController/VideoListController.js';
+import { AudioListController } from './ListController/AudioListController.js';
+import { ImageListController } from './ListController/ImageListController.js';
+import { DesktopListController } from './ListController/DesktopListController.js';
+import { SceneAudioListController } from './ListController/SceneAudioListController.js';
+import { LayoutController } from './layout/LayoutController.js';
 
+WebOBSData.useWebGL = true;
 
-//let data = localStorage.getItem('saveData');
-window.data = {
-    selectedIndex: 0,
-    items: [
-        {
-            id: `source_${util.generateUUID()}`,
-            name: 'シーン 1',
-            isSpecialScene: true,
-            selectedIndex: 0,
-            items: [
-                {
-                    id: `source_${util.generateUUID()}`,
-                    name: 'ソース 1',
-                    visibility: true,
-                    locked: false,
-                    target: null,
-                    cx: 50,
-                    cy: 50,
-                    left: 0,
-                    top: 0,
-                    right: 100,
-                    bottom: 100,
-                    width: 100,
-                    height: 100,
-                    aspectRatio: 1,
-                    threeDType: '2D'
-                }
-            ]
-        },
-        {
-            id: `scene_${util.generateUUID()}`,
-            name: 'シーン 3',
-            isSpecialScene: false,
-            selectedIndex: 0,
-            items: [
-                {
-                    id: `source_${util.generateUUID()}`,
-                    name: 'ソース 2',
-                    visibility: true,
-                    locked: true,
-                    target: null,
-                    cx: 150,
-                    cy: 150,
-                    left: 100,
-                    top: 100,
-                    right: 200,
-                    bottom: 200,
-                    width: 100,
-                    height: 100,
-                    aspectRatio: 1,
-                    threeDType: 'SS_LR'
-                }
-            ]
-        }
-    ],
-    mics: []
-};
+transitionSelect.oninput = evt => {
+    WebOBSData.transition = transitionSelect.value;
+}
+transitionTime.oninput = evt => {
+    WebOBSData.transitionTime = transitionTime.valueAsNumber;
+}
 
-window.allSources = {}; // TODO
-data.items.forEach(sceneItem => {
-    sceneItem.items.forEach(sourceItem => window.allSources[sourceItem.id] = sourceItem);
-});
-
-
-window.addEventListener('contextmenu', evt => {
+window.addEventListener('dragenter', evt => {
     evt.preventDefault();
-});
+    const items = evt.dataTransfer.items;
+    const item = items[0];
+    const kind = item.kind;
+    const type = item.type;
+    if (kind === 'string') {
+
+    } else if (kind === 'file') {
+        const types = [];
+        [...items].forEach(item => {
+            const mediaType = item.type.split('/')[1];
+            if (['png', 'jpg', 'jpeg'].includes(mediaType)) types.push('image');
+            if (['wav', 'mp3', 'flac'].includes(mediaType)) types.push('audio')
+            if (['ogg', 'webm', 'mp4'].includes(mediaType)) types.push('video');
+        });
+        const tabContents = document.querySelectorAll('.tab-content');
+        document.querySelectorAll('.tab-content').forEach(tabContent => tabContent.style.display = 'none');
+        if (types.length) {
+            categoryTabHilighter.style.transform = `translateX(${1 * 100}%)`;
+            mediaList.style.display = '';
+        }
+        if (types.includes('video')) {
+            mediaTabHilighter.style.transform = `translateX(${0 * 100}%)`;
+            videoList.style.display = '';
+            //videoListDropArea.style.display = 'flex';
+        } else if (types.includes('audio')) {
+            mediaTabHilighter.style.transform = `translateX(${1 * 100}%)`;
+            audioList.style.display = '';
+            //audioListDropArea.style.display = 'flex';
+        } else if (types.includes('image')) {
+            mediaTabHilighter.style.transform = `translateX(${2 * 100}%)`;
+            imageList.style.display = '';
+            //imageListDropArea.style.display = 'flex';
+        }
+        if (types.includes('video') || types.includes('audio') || types.includes('image')) {
+            //layoutAreaDropArea.style.display = 'flex';
+        }
+    }
+}, true);
 
 
-window.dataLoading = true;
-let selectedScene = data.items[data.selectedIndex];
-let selectedSource = null;
+
+
 const cameraListView = new CameraListController('#cameraList');
 const micListView = new MicListController('#micList');
 const videoListView = new VideoListController('#videoList');
 const audioListView = new AudioListController('#audioList');
+const imageListView = new ImageListController('#imageList');
 const sceneListView = new SceneListController('#sceneList');
 const sourceListView = new SourceListController('#sourceList');
 const mixerListView = new MixerListController('#mixerList');
 const desktopListView = new DesktopListController('#desktopList');
+const sceneAudioListView = new SceneAudioListController('#sceneAudioList');
 window.layout = new LayoutController({
     cameraListView,
     micListView,
+    desktopListView,
     audioListView,
     videoListView,
+    imageListView,
     sceneListView,
-    sourceListView,
-    data
+    sourceListView
 });
-window.dataLoading = false;
-
-sceneListView.on('selectedIndexChanged', arg => {
-    selectedScene = data.items[arg.newIndex];
-    sourceListView.changeScene(data, selectedScene, arg);
-});
-
-sourceListView.on('selectedIndexChanged', arg => {
-    selectedSource = selectedScene.items[arg.newIndex];
-});
-sourceListView.on('itemRemoved', ({ index, item }) => {
-    layout.redraw();
-});
-
-cameraListView.on('selectedIndexChanged', arg => {
-    console.log(arg);
-});
-
-// イベントハンドラーを設定した後にsetDataを行う
-sceneListView.setData(data);
-
-layout.on('dropped', item => {
-    sourceListView.addItem(item);
-});
-
-sourceListView.on('itemAdded', (index, item) => {
-    if (item.mediaType === 'audio') {
-        audioListView.addItem(item);
-    } else if (item.mediaType === 'video') {
-        videoListView.addItem(item);
-    }
-});
-
-layout.on('selectedObjectChanged', obj => {
-    sourceListView.changeSelect(obj);
-});
-
-setTimeout(() => {
-    layout.onResize();
-}, 0);
-
-btnCaptureWindow.onclick = evt => {
-    const customEvent = new CustomEvent('request', {detail: 'window'});
-    window.dispatchEvent(customEvent);
-};
-btnCaptureTab.onclick = evt => {
-    const customEvent = new CustomEvent('request', {detail: 'tab'});
-    window.dispatchEvent(customEvent);
-};
-btnCaptureScreen.onclick = evt => {
-    const customEvent = new CustomEvent('request', {detail: 'screen'});
-    window.dispatchEvent(customEvent);
-};
-
-window.addEventListener('desktopStreamId', evt => {
-    desktopListView.getItems(evt.detail);
-});
-
-//cameraList.getItems();
-
-
-// window.addEventListener('streamId', evt => {
-//     const sender = evt.detail.sender;
-// });
-
-transitionSelect.value = 'fade';
-transitionTime.value = 300;
-
-

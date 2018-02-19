@@ -24,8 +24,9 @@ export class AudioInputItem extends EventEmitter {
         this.audio.volume = value / 100;
     }
 
-    getStream() {
-        return navigator.mediaDevices.getUserMedia(this.constraints).then(stream => {
+    async getStream() {
+        const constraints = await this.getConstraints();
+        return navigator.mediaDevices.getUserMedia(constraints).then(stream => {
             stream.getVideoTracks().forEach(track => {
                 track.stop();
                 stream.removeTrack(track);
@@ -36,6 +37,7 @@ export class AudioInputItem extends EventEmitter {
             this.audio.srcObject = stream;
             this.stateChange('started');
         }).catch(error => {
+            console.log(error);
             this.stateChange('error', error);
         });
     }
