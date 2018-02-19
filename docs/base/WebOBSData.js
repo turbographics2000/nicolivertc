@@ -170,7 +170,7 @@ class WebOBSData extends EventEmitter {
         item.target.src = mediaItem.target.src;
         item.target.srcObject = mediaItem.target.srcObject;
         item.mediaId = mediaItem.id;
-        if(this.useWebGL && ['camera', 'video', 'image'].includes(mediaType)) {
+        if(this.useWebGL && ['camera', 'video', 'image'].includes(item.mediaType)) {
             item.webGLObj = util.createWebGLObj(item.mediaType);
         }
         this.getItems('source').push(item);
